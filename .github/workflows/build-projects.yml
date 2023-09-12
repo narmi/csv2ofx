@@ -1,0 +1,34 @@
+name: Build and upload projects
+
+on:
+  push:
+    branches:
+      - 'master'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and upload projects
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.PACKAGES_AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.PACKAGES_AWS_SECRET_KEY }}
+        aws-region: us-east-1
+    - name: Setup Python
+      id: setup-python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9.x"
+    - name: Install wheel package
+      run: pip install wheel
+    - name: Build csv2ofx package
+      env:
+        GITHUB_RUN_NUMBER: ${{github.run_number}}
+      run: python setup.py --help bdist_wheel
+    - name: Deploy build packages to s3 repository
+      run: aws s3 sync $dir/dist s3://packages.external.narmitech.com/python-packages/$dir
