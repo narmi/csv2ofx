@@ -29,6 +29,6 @@ jobs:
     - name: Build csv2ofx package
       env:
         GITHUB_RUN_NUMBER: ${{github.run_number}}
-      run: python setup.py --help bdist_wheel
+      run: python setup.py bdist_wheel
     - name: Deploy build packages to s3 repository
       run: aws s3 sync $dir/dist s3://packages.external.narmitech.com/python-packages/$dir
