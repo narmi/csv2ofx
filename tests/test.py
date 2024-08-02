@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # vim: sw=4:ts=4:expandtab
 
 """
@@ -13,9 +12,8 @@ import sys
 
 from difflib import unified_diff
 from os import path as p
-from io import StringIO, open
+from io import StringIO
 from timeit import default_timer as timer
-from builtins import *
 
 import pygogo as gogo
 
@@ -53,8 +51,8 @@ def main(script, tests, verbose=False, stop=True):
         opts, arguments, expected = test
         joined_opts = " ".join(opts) if opts else ""
         joined_args = '"%s"' % '" "'.join(arguments) if arguments else ""
-        command = "%s %s %s" % (script, joined_opts, joined_args)
-        short_command = "%s %s %s" % (short_script, joined_opts, joined_args)
+        command = "{} {} {}".format(script, joined_opts, joined_args)
+        short_command = "{} {} {}".format(short_script, joined_opts, joined_args)
         result = env.run(command, cwd=PARENT_DIR, expect_stderr=True)
         output = result.stdout
 

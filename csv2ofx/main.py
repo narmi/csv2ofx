@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # vim: sw=4:ts=4:expandtab
 
 """
@@ -26,7 +25,6 @@ from imp import find_module, load_module
 from pkgutil import iter_modules
 from operator import itemgetter
 from os import path as p
-from io import open
 from datetime import datetime as dt
 from argparse import RawTextHelpFormatter, ArgumentParser
 from pprint import pprint
@@ -37,7 +35,6 @@ try:
 except NameError:
     FileNotFoundError = IOError
 
-from builtins import *
 from dateutil.parser import parse
 from meza.io import read_csv, IterStringIO, write
 

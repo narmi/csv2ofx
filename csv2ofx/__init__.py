@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # vim: sw=4:ts=4:expandtab
 
 """
@@ -25,8 +24,7 @@ from datetime import datetime as dt
 from operator import itemgetter
 from decimal import Decimal
 
-from builtins import *
-from six.moves import filterfalse
+from itertools import filterfalse
 from meza.process import merge, group
 from dateutil.parser import parse
 
@@ -46,7 +44,7 @@ __copyright__ = "Copyright 2015 Reuben Cummings"
 md5 = lambda content: hashlib.md5(content.encode("utf-8")).hexdigest()
 
 
-class Content(object):  # pylint: disable=too-many-instance-attributes
+class Content:  # pylint: disable=too-many-instance-attributes
     """A transaction holding object"""
 
     def __init__(self, mapping=None, **kwargs):
@@ -243,7 +241,7 @@ class Content(object):  # pylint: disable=too-many-instance-attributes
         payee = self.get("payee", trxn)
         desc = self.get("desc", trxn)
         notes = self.get("notes", trxn)
-        memo = "%s %s" % (desc, notes) if desc and notes else desc or notes
+        memo = "{} {}".format(desc, notes) if desc and notes else desc or notes
         check_num = self.get("check_num", trxn)
         details = "".join(filter(None, [date, raw_amount, payee, memo]))
         category = self.get("category", trxn, "")

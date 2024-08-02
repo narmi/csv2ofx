@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # vim: sw=4:ts=4:expandtab
 # pylint: disable=no-self-use
 
@@ -19,7 +18,6 @@ Attributes:
 """
 from datetime import datetime as dt
 
-from builtins import *
 from meza.fntools import chunk, xmlize
 from meza.process import group
 
@@ -46,7 +44,7 @@ class OFX(Content):
             <csv2ofx.ofx.OFX object at 0x...>
         """
         # TODO: Add timezone info  # pylint: disable=fixme
-        super(OFX, self).__init__(mapping, **kwargs)
+        super().__init__(mapping, **kwargs)
         self.resp_type = "INTRATRNRS" if self.split_account else "STMTTRNRS"
         self.def_type = kwargs.get("def_type")
         self.prev_group = None
@@ -140,13 +138,13 @@ class OFX(Content):
             ...     'inv_split_account': None, 'x_action': '', 'type': 'DEBIT'}
             True
         """
-        data = super(OFX, self).transaction_data(trxn)
+        data = super().transaction_data(trxn)
         args = [self.account_types, self.def_type]
         split = data["split_account"]
         sa_type = utils.get_account_type(split, *args) if split else None
         memo = data.get("memo")
         _class = data.get("class")
-        memo = "%s %s" % (memo, _class) if memo and _class else memo or _class
+        memo = "{} {}".format(memo, _class) if memo and _class else memo or _class
 
         new_data = {
             "account_type": utils.get_account_type(data["account"], *args),
@@ -481,5 +479,4 @@ class OFX(Content):
             cleansed = [{k: next(xmlize([v])) for k, v in c.items()} for c in chnk]
             keyfunc = self.id if self.is_split else self.account
 
-            for gee in group(cleansed, keyfunc):
-                yield gee
+            yield from group(cleansed, keyfunc)
