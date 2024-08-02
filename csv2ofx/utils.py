@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # vim: sw=4:ts=4:expandtab
 
 """
@@ -17,7 +16,6 @@ Attributes:
     ENCODING (str): Default file encoding.
 """
 
-from builtins import *
 from meza.fntools import get_separators
 from meza.convert import to_decimal
 from collections import OrderedDict

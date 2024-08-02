@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # vim: sw=4:ts=4:expandtab
 # pylint: disable=no-self-use
 
@@ -17,7 +16,6 @@ Examples:
 Attributes:
     ENCODING (str): Default file encoding.
 """
-from builtins import *
 from meza.fntools import chunk
 from meza.process import group
 
@@ -48,7 +46,7 @@ class QIF(Content):
         """
         self.date_fmt = date_fmt
 
-        super(QIF, self).__init__(mapping, date_fmt=date_fmt, **kwargs)
+        super().__init__(mapping, date_fmt=date_fmt, **kwargs)
         self.def_type = kwargs.get("def_type")
         self.prev_account = None
         self.prev_group = None
@@ -101,13 +99,13 @@ class QIF(Content):
             ...     'inv_split_account': None, 'x_action': '', 'type': 'DEBIT'}
             True
         """
-        data = super(QIF, self).transaction_data(tr)
+        data = super().transaction_data(tr)
         args = [self.account_types, self.def_type]
         memo = data.get("memo")
         _class = data.get("class")
 
         if memo and _class:
-            split_memo = "%s %s" % (memo, _class)
+            split_memo = "{} {}".format(memo, _class)
         else:
             split_memo = memo or _class
 
@@ -332,5 +330,4 @@ class QIF(Content):
         for chnk in chunk(records, chunksize):
             keyfunc = self.id if self.is_split else self.account
 
-            for gee in group(chnk, keyfunc):
-                yield gee
+            yield from group(chnk, keyfunc)
